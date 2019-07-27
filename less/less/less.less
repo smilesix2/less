@@ -1,0 +1,122 @@
+@import "reset";
+@import (less)"my.css";
+
+// 1. var
+
+// 1.1 变量     可全局可局部，类似向上作用域
+@width:100px;
+
+// 1.2 混合
+.border{
+	border:1px solid red;
+}
+.border_width(@width){
+	border:@width solid red;
+}
+.border_width_1(@width:1px){
+	border:@width solid red;
+}
+
+.radius(@width:6px){
+	border-radius: @width;
+	-webkit-border-radius: @width;
+	-moz-border-radius: @width;
+	-ms-border-radius: @width;
+	-o-border-radius: @width;
+}
+
+// 1.3 匹配   共有部分 .triangle(@_,@w:10px,@c:red)   参数不能少
+.triangle(@_,@w:10px,@c:red){
+	width:0;
+	height:0;
+	overflow:hidden;
+	border-style:solid dashed dashed dashed;
+}
+.triangle(top,@w:10px,@c:red){
+	border-width:@w;
+	border-color:transparent transparent @c transparent;	
+}
+
+.triangle(bottom,@w:10px,@c:red){
+	border-width:@w;
+	border-color:@c transparent transparent transparent;
+}
+
+// 1.3.1 一般匹配
+.pos(a){
+	position:absolute;
+}
+.pos(r){
+	position:relative;
+}
+
+// 1.4 运算  运算符左右加空格  error：@width-100  （=== var @width-100）
+.reduce{
+	width:@width + 100;
+} 
+
+// 1.5 嵌套  & 表示上层对象     &-item     &:hover
+
+// 1.6 @arguments
+.myborder(@w:11px,@t:dashed,@c:yellow){
+	border:@arguments;
+}
+
+// 1.7 避免编译  ~''     - 10px  空格且带单位
+.width_pad{
+	width:~'calc(100% - 10px)'
+}
+
+// 1.8 !important
+.width_pad{
+	width:~'calc(100% - 10px)'!important
+}
+
+// 1.9 避免编译
+.border-no(){
+	border:10px solid red;
+}
+
+
+// 2. content
+
+.wrap{
+	width:@width;
+	height:@width;
+	.border;
+	.border_width(10px);
+	.border_width_1(100px);
+	.border_width_1;
+	.radius(20px);
+}
+
+.triangle1{
+	.pos(r);
+	.triangle(bottom,20px)
+}
+
+.box{
+	.wrap;
+	.reduce;
+}
+
+.list{
+	.myborder;
+	//.myborder(40px);
+	&-item{
+		.border;
+		.link{
+			color:red;
+			&:hover{
+				background-color:black;
+			}
+		}
+	}
+}
+
+.reduce2{
+	.border;
+	.width_pad;
+	height:50px;
+	.border-no();
+}
